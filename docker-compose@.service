@@ -1,0 +1,26 @@
+[Unit]
+Description=%i Docker Compose Service
+After=docker.service network-online.target NetworkManager-wait-online.service
+Requires=docker.service network-online.target NetworkManager-wait-online.service
+
+[Service]
+WorkingDirectory=/home/kmiyake/Developer/%i
+; Type=oneshot
+RemainAfterExit=yes
+Restart=on-failure
+RestartSec=60
+
+ExecStartPre=/bin/docker-compose down -v
+ExecStartPre=/bin/docker-compose rm -fv
+ExecStartPre=/bin/docker-compose pull --quiet --parallel
+ExecStart=/bin/docker-compose up -d
+
+ExecStop=/bin/docker-compose down -v
+
+ExecReload=/bin/docker-compose down -v
+ExecReload=/bin/docker-compose rm -fv
+ExecReload=/bin/docker-compose pull --quiet --parallel
+ExecReload=/bin/docker-compose up -d
+
+[Install]
+WantedBy=multi-user.target

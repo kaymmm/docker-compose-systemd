@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh docker compose container
+Requires=docker-compose@%i.service
+After=docker-compose@%i.service
+
+[Timer]
+OnCalendar=*-*-* 06:10:00
+RandomizedDelaySec=360
+
+[Install]
+WantedBy=timers.target
